@@ -223,3 +223,14 @@ ptxdist oldconfig all
 - Build outputs: `platform-*/images/`
 - Documentation: `doc/*.rst`
 - Hardware docs: `doc/hardware_*.rst`
+
+## Documentation Synchronization
+
+**IMPORTANT**: When making changes to `BeagleBone_Black_Guide.md`, always mirror the same content to `README.md`. These files must be kept in sync to ensure consistent documentation across the repository. This includes:
+
+- All content updates
+- Formatting changes
+- New sections or restructuring
+- Bug fixes or corrections
+
+Use `cp BeagleBone_Black_Guide.md README.md` or equivalent to maintain synchronization.
