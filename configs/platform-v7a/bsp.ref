@@ -1,0 +1,12 @@
+optee_disabled_features:
+  description: |
+    OP-TEE is used as secure monitor on STM32MP13x providing power
+    management and clock/reset control support. We don't use it as
+    part of a trusted boot setup, so we prefer debuggability over
+    reduction of the attack surface.
+  present:
+    - CFG_DEBUG_INFO
+    - CFG_ENABLE_EMBEDDED_TESTS
+    - CFG_TEE_CORE_TA_TRACE
+
+# vim: filetype=yaml shiftwidth=2 expandtab

@@ -1,0 +1,12 @@
+## SECTION=image
+
+config IMAGE_LXA_MC1
+	tristate
+	select HOST_GENIMAGE
+	select HOST_TF_A
+	select IMAGE_ROOT_EXT
+	select BAREBOX
+	select TF_A
+	prompt "Generate images/lxa-mc1.hdimg"
+	help
+	  Generate GPT image for the Linux Automation MC-1

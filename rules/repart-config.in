@@ -1,0 +1,11 @@
+## SECTION=distrokit
+
+config REPART_CONFIG
+	tristate "repart-config"
+	select RC_ONCE
+	select SYSTEMD
+	select SYSTEMD_REPART
+	default y
+	help
+	  Install config files to create the additional data and root-B
+	  partitions on first boot

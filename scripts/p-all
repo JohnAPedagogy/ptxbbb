@@ -1,0 +1,13 @@
+#!/bin/sh
+# Run ptxdist on all platformconfigs
+if [ -z "$PTXDIST" ]; then
+	PTXDIST=ptxdist
+else
+	tput setaf 3 # yellow
+	echo Note: using PTXDIST=$PTXDIST
+	tput sgr 0   # back to normal
+fi
+
+for pcfg in configs/platform-*/platformconfig; do
+	$PTXDIST --platformconfig="$pcfg" "$@"
+done

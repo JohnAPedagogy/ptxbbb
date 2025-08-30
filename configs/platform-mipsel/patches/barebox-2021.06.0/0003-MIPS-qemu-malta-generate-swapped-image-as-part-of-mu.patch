@@ -1,0 +1,102 @@
+From 152bbdb7cfefab89132549ea83fb0b859c290e8a Mon Sep 17 00:00:00 2001
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Fri, 4 Jun 2021 10:46:55 +0200
+Subject: [PATCH] MIPS: qemu-malta: generate swapped image as part of
+ multi-image build
+
+Having to manually swap the words in the MIPS Malta image for QEMU
+little endian emulation is annoying.
+
+Have the multi-image build for Malta generate a second .swapped
+image that can be readily used if needed.
+
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Link: https://lore.barebox.org/20210604084704.17410-5-a.fatoum@pengutronix.de
+Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+ Documentation/boards/mips/qemu-malta.rst | 16 ++++------------
+ images/.gitignore                        |  1 +
+ images/Makefile                          |  2 +-
+ images/Makefile.malta                    | 10 +++++++++-
+ 4 files changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/Documentation/boards/mips/qemu-malta.rst b/Documentation/boards/mips/qemu-malta.rst
+index e188ae8c642a..fd37d5edb229 100644
+--- a/Documentation/boards/mips/qemu-malta.rst
++++ b/Documentation/boards/mips/qemu-malta.rst
+@@ -10,31 +10,23 @@ QEMU run string:
+ 
+   qemu-system-mips -nodefaults -M malta -m 256 \
+       -device VGA -serial stdio -monitor null \
+-      -bios barebox-flash-image
++      -bios ./images/barebox-qemu-malta.img
+ 
+ 
+ Little-endian mode
+ ------------------
+ 
+-Running little-endian Malta is a bit tricky.
+ In little-endian mode the 32bit words in the boot flash image are swapped,
+ a neat trick which allows bi-endian firmware.
+ 
+-You have to swap words of ``zbarebox.bin`` image, e.g.:
+-
+-.. code-block:: sh
+-
+-  echo arch/mips/pbl/zbarebox.bin \
+-      | cpio --create \
+-      | cpio --extract --swap --unconditional
+-
+-QEMU run string:
++The barebox build generates a second ``./images/barebox-qemu-malta.img.swapped``
++image that can be used in this case, e.g.:
+ 
+ .. code-block:: sh
+ 
+   qemu-system-mipsel -nodefaults -M malta -m 256 \
+       -device VGA -serial stdio -monitor null \
+-      -bios barebox-flash-image
++      -bios ./images/barebox-qemu-malta.img.swapped
+ 
+ 
+ Using GXemul
+diff --git a/images/.gitignore b/images/.gitignore
+index eafdb44b5bdd..3a9a77dad16e 100644
+--- a/images/.gitignore
++++ b/images/.gitignore
+@@ -32,3 +32,4 @@ barebox.sum
+ *.mvebu1img
+ *.stm32
+ *.nmon
++*.swapped
+diff --git a/images/Makefile b/images/Makefile
+index c185982c17ed..cc330d957597 100644
+--- a/images/Makefile
++++ b/images/Makefile
+@@ -218,5 +218,5 @@ $(flash-list): $(image-y-path)
+ clean-files := *.pbl *.pblb *.map start_*.imximg *.img barebox.z start_*.kwbimg \
+ 	start_*.kwbuartimg *.socfpgaimg *.mlo *.t20img *.t20img.cfg *.t30img \
+ 	*.t30img.cfg *.t124img *.t124img.cfg *.mlospi *.mlo *.mxsbs *.mxssd \
+-	start_*.simximg start_*.usimximg *.zynqimg *.image
++	start_*.simximg start_*.usimximg *.zynqimg *.image *.swapped
+ clean-files += pbl.lds
+diff --git a/images/Makefile.malta b/images/Makefile.malta
+index 5739ec464092..96d7b86b1187 100644
+--- a/images/Makefile.malta
++++ b/images/Makefile.malta
+@@ -1,3 +1,11 @@
++quiet_cmd_bswap32_image = BSWAP4  $@
++      cmd_bswap32_image = cp $< $@ && \
++			  truncate -s %4 $@ && \
++			  objcopy -I binary --reverse-byte=4 $@
++
++$(obj)/%.img.swapped: $(obj)/%.img FORCE
++	$(call if_changed,bswap32_image)
++
+ pblb-$(CONFIG_BOARD_QEMU_MALTA) += start_qemu_malta
+ FILE_barebox-qemu-malta.img = start_qemu_malta.pblb
+-image-$(CONFIG_BOARD_QEMU_MALTA) += barebox-qemu-malta.img
++image-$(CONFIG_BOARD_QEMU_MALTA) += barebox-qemu-malta.img barebox-qemu-malta.img.swapped
+-- 
+2.39.2
+

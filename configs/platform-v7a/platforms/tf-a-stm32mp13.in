@@ -1,0 +1,12 @@
+## SECTION=bootloader
+
+menuconfig TF_A_STM32MP13
+	select BOOTLOADER
+	select HOST_DTC
+	prompt "ARM Trusted Firmware-A for STM32MP13 with OP-TEE"
+	depends on ARCH_ARM
+	bool
+	help
+	  ARM Trusted Firmware-A for STM32MP13 series SoCs with OP-TEE enabled.
+	  Currently, these can't be built in the same build as the
+	  STM32MP15 with SP_min.

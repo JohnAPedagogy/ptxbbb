@@ -1,0 +1,41 @@
+From a8c4a99884bded5a2951d8fc8e892b9c4d60a5f8 Mon Sep 17 00:00:00 2001
+From: Lars Schmidt <lsc@pengutronix.de>
+Date: Wed, 16 Apr 2025 15:26:56 +0200
+Subject: [PATCH] pinctrl: at91: add sama5d3 compatible after DT regression
+
+Commit f9abec74133a6 ("ARM: dts: microchip: Remove additional compatible
+string from PIO3 pinctrl nodes") removed compatible string
+atmel,at91sam9x5-pinctrl, which was used by pinctrl driver for sama3d3 in
+barebox. Compatible string atmel,sama5d3-pinctrl was left in list, so
+that needs to be included for identification.
+
+The removal caused an issue during boot process. The system did still boot,
+but no bootloader console was shown. Leaving the user without
+possibility to interact with the bootloader.
+
+The DT ABI breakage has been reported upstream:
+
+https://lore.kernel.org/all/fcdb9283-07aa-4d50-ac4d-317b0a4e5f7e@pengutronix.de/
+
+Signed-off-by: Lars Schmidt <lsc@pengutronix.de>
+---
+ drivers/pinctrl/pinctrl-at91.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
+index a3372a5035..ddc725187b 100644
+--- a/drivers/pinctrl/pinctrl-at91.c
++++ b/drivers/pinctrl/pinctrl-at91.c
+@@ -370,6 +370,9 @@ static struct at91_pinctrl_mux_ops at91sam9x5_ops = {
+ 
+ static struct of_device_id at91_pinctrl_dt_ids[] = {
+ 	{
++		.compatible = "atmel,sama5d3-pinctrl",
++		.data = &at91sam9x5_ops,
++	}, {
+ 		.compatible = "atmel,at91rm9200-pinctrl",
+ 		.data = &at91rm9200_ops,
+ 	}, {
+-- 
+2.39.5
+

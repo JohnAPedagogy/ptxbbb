@@ -1,0 +1,3 @@
+0001-MIPS-dts-add-chosen-stdout-path-where-it-is-missing.patch
+0002-MIPS-qemu-malta-explicitly-set-stdout-path.patch
+0003-MIPS-qemu-malta-generate-swapped-image-as-part-of-mu.patch

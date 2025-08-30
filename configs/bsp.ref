@@ -1,0 +1,86 @@
+includes:
+  - file: ptxdist.ref
+  - file: platform-v7a/bsp.ref
+    condition: kconfig.have_optee_config() and kconfig.OPTEEConfig()['CFG_STM32MP13']
+
+ptxdist_debug_pci:
+  description: |
+    In DistroKit, we have platforms with and without PCI.
+    For x86_64, we don't want to have lspci, although PCI is available in the
+    kernel.
+  variants:
+    - condition: kconfig.PTXPlatformConfig()['ARCH_X86']
+      value: False
+    - condition: kconfig.PTXPlatformConfig()['ARCH_ARM64']
+      value: False
+    - condition: kconfig.PTXPlatformConfig()['ARCH_MIPS'] and not kconfig.KernelConfig()['ATH79']
+      value: False
+    - value: True
+
+kernel_dtb_partitions:
+  description: |
+    A fixed-partitions node is needed for qemu on mips and
+    for some upstream devicetrees in v7a_noneon.
+  variants:
+    - condition: kconfig.PTXPlatformConfig()['ARCH_MIPS']
+      value: True
+    - condition: kconfig.PTXPlatformConfig().options.get('PLATFORM') == "v7a_noneon"
+      value: True
+    - condition: kconfig.PTXPlatformConfig().options.get('PLATFORM') == "v8a"
+      value: True
+    - value: False
+
+kernel_initrd:
+  description: |
+    Initrd support is not needed on most embedded systems.
+    For v7a and v8a, we use an initrd for the fastboot usecase.
+  variants:
+    - condition: kconfig.PTXPlatformConfig().options['PLATFORM'] in ('v8a', 'v7a')
+      value: True
+    - value: False
+
+barebox_arm_optimized_string_functions:
+  description: |
+    The use of assembler optimized memcpy / memset functions improves
+    throughput at the cost of an increase in binary size.
+    The am335x-mlo configuration is very size constrained, because it
+    needs to fit into on-chip SRAM to be able to set up DRAM and thus
+    we use the smaller C implementation instead.
+  variants:
+    - condition: |
+        kconfig.have_barebox_config() and
+        kconfig.BareboxConfig()['ARCH_OMAP'] and kconfig.BareboxConfig()['SHELL_NONE']
+      value: False
+    - value: True
+
+barebox_gpt_support:
+  description: |
+    The am335x boot ROM expects SD/MMC media to be formatted as MBR
+    and loads the first stage bootloader from the BOOT.BIN file from the
+    first vfat partition. As the MLO
+
+    As the am335x-mlo configuration's only function is to chainload
+    barebox, we only need GPT support later on in the regular second stage
+    barebox configuration.
+  variants:
+    - condition: |
+        kconfig.have_barebox_config() and
+        kconfig.BareboxConfig()['ARCH_OMAP'] and kconfig.BareboxConfig()['SHELL_NONE']
+      value: False
+    - value: True
+
+rootfs_unused_libraries:
+  description: |
+    - libatomic is needed on mips and rpi1 by libcrypto, but for simplicity ship it on all platforms
+  optional:
+  - !!re '/usr/lib/libatomic\.so.*'
+
+optee_security_warning_disabled:
+  description: |
+    OP-TEE is used as secure monitor on STM32MP13x providing power
+    management and clock/reset control support. We don't use it as
+    part of a trusted boot setup, so it's apt for OP-TEE to warn
+    about this at startup and thus we'll keep CFG_INSECURE enabled.
+  value: True
+
+# vim: filetype=yaml shiftwidth=2 expandtab

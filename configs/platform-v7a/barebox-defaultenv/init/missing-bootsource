@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if of_compatible -k arm,vexpress,v2p-ca9 || of_compatible -k raspberrypi,3-model-b; then
+	realbootsource="disk0";
+fi
+
+if [ -z "$realbootsource" ]; then
+	exit
+fi
+
+for part in root-A root-B; do
+	if [ ! -e "/env/boot/bootsource.${part}" ]; then
+		echo "Platform does not support 'bootsource' target, creating workaround boot target for ${part}"
+		echo -o /env/boot/bootsource.${part} '#!/bin/sh'
+		echo -a /env/boot/bootsource.${part} "boot ${realbootsource}.${part}"
+	fi
+done
+saveenv

@@ -1,0 +1,1 @@
+/mnt/c/work/Favorites/resources/ee/dds/600 Technology/620 Engineering/629.8 Systems_n_Control/linuxshelldev/ptxdist/BeagleBone_Black_Guide.md

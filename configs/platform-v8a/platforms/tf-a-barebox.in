@@ -1,0 +1,7 @@
+## SECTION=non_free_firmware
+
+config BAREBOX_DEPENDENCIES
+	tristate
+	select TF_A
+	help
+		Inject necessary files from non-free firmware into Barebox

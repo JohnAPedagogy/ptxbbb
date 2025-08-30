@@ -1,0 +1,74 @@
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Tue, 24 Jun 2025 20:39:30 +0200
+Subject: [PATCH] ARM: vexpress: increase barebox partition size
+
+Commit 3630fa400be5 ("ARM: remove vexpress_defconfig") made
+multi_v7_defconfig the go-to defconfig for vexpress.
+
+The multi defconfig enables a lot of drivers and functionality though
+increasing the image size from 300K to 1.2M, which causes barebox to
+extend beyond the previously configured 512K barebox partition.
+
+Fix this by giving each of barebox and its environment 2M of space,
+which should be enough for many years to come.
+
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+[rhi: picked from https://lore.barebox.org/barebox/20250624183930.2733353-1-a.fatoum@pengutronix.de/ ]
+Signed-off-by: Roland Hieber <rhi@pengutronix.de>
+---
+ arch/arm/dts/vexpress-v2p-ca15.dts | 11 ++++++++---
+ arch/arm/dts/vexpress-v2p-ca9.dts  | 10 +++++-----
+ 2 files changed, 13 insertions(+), 8 deletions(-)
+
+diff --git a/arch/arm/dts/vexpress-v2p-ca15.dts b/arch/arm/dts/vexpress-v2p-ca15.dts
+index acf4e023d5cd..891e6dbbe4b4 100644
+--- a/arch/arm/dts/vexpress-v2p-ca15.dts
++++ b/arch/arm/dts/vexpress-v2p-ca15.dts
+@@ -19,12 +19,17 @@ partitions {
+ 
+ 		partition@0 {
+ 			label = "barebox";
+-			reg = <0x0 0x80000>;
++			reg = <0x0 0x200000>;
+ 		};
+ 
+-		barebox_env: partition@80000 {
++		barebox_env: partition@200000 {
+ 			label = "barebox-environment";
+-			reg = <0x80000 0x80000>;
++			reg = <0x200000 0x200000>;
++		};
++
++		state_storage: partition@400000 {
++			label = "barebox-state";
++			reg = <0x400000 0x100000>;
+ 		};
+ 	};
+ };
+diff --git a/arch/arm/dts/vexpress-v2p-ca9.dts b/arch/arm/dts/vexpress-v2p-ca9.dts
+index d1484ff4b0a9..c320f67c2371 100644
+--- a/arch/arm/dts/vexpress-v2p-ca9.dts
++++ b/arch/arm/dts/vexpress-v2p-ca9.dts
+@@ -77,17 +77,17 @@ partitions {
+ 
+ 		partition@0 {
+ 			label = "barebox";
+-			reg = <0x0 0x80000>;
++			reg = <0x0 0x200000>;
+ 		};
+ 
+-		barebox_env: partition@80000 {
++		barebox_env: partition@200000 {
+ 			label = "barebox-environment";
+-			reg = <0x80000 0x80000>;
++			reg = <0x200000 0x200000>;
+ 		};
+ 
+-		state_storage: partition@100000 {
++		state_storage: partition@400000 {
+ 			label = "barebox-state";
+-			reg = <0x100000 0x100000>;
++			reg = <0x400000 0x100000>;
+ 		};
+ 	};
+ };

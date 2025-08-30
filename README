@@ -1,0 +1,16 @@
+README
+------
+
+The documentation is now available in the doc/ directory, with the
+starting point at
+
+	doc/intro.rst
+
+It can be built into HTML documentation with
+
+	$ ptxdist docs-html
+
+Then point your browser to
+
+	Documentation/html/index.html
+

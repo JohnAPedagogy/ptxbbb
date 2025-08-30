@@ -1,0 +1,11 @@
+## SECTION=image
+
+config IMAGE_FIP_K3
+	tristate
+	prompt "Generate images/k3.fip"
+	select HOST_TF_A
+	select BAREBOX
+	select TF_A
+	select FIRMWARE_TI
+	help
+	  Generates a fip image for Beagleplay

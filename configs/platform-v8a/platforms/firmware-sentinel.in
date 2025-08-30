@@ -1,0 +1,5 @@
+## SECTION=non_free_firmware
+
+menuconfig FIRMWARE_SENTINEL
+	tristate
+	prompt "firmware-sentinel             "

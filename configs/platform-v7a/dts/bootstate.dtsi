@@ -1,0 +1,176 @@
+/** TI AM335x BeagleBone black ************************************************/
+#ifdef am335x_boneblack_dts
+/ {
+	aliases {
+		state = &state_mmc1;
+	};
+
+	state_mmc1: state {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "barebox,state";
+		magic = <0xa9cc3f17>;
+		backend-type = "raw";
+		backend = <&backend_state_mmc1>;
+		backend-storage-type = "direct";
+		backend-stridesize = <0x40>;
+	};
+};
+
+&mmc1 {
+       partitions {
+               compatible = "fixed-partitions";
+               #address-cells = <2>;
+               #size-cells = <2>;
+
+               barebox: partition@0 {
+                       label = "barebox";
+                       reg = <0x0 0x0 0x0 0xe0000>;
+               };
+
+               backend_state_mmc1: partition@e0000 {
+                       label = "state";
+                       reg = <0x0 0xe0000 0x0 0x20000>;
+               };
+       };
+};
+#endif
+
+/** Raspberry Pi **************************************************************/
+#if defined(bcm2836_rpi_2_dts)   || \
+    defined(bcm2837_rpi_3_dts)   || \
+    defined(bcm2837_rpi_cm3_dts) || \
+    defined(bcm2711_rpi_4_dts)
+/ {
+	aliases {
+		state = &state;
+	};
+
+	state: state {
+		magic = <0x11fb08ef>;
+		compatible = "barebox,state";
+		backend-type = "raw";
+		backend = <&statepart>;
+		backend-stridesize = <0x80>;
+		backend-storage-type = "direct";
+		#address-cells = <1>;
+		#size-cells = <1>;
+	};
+};
+
+#ifdef bcm2711_rpi_4_dts
+&emmc2 {
+#else
+&sdhost {
+#endif
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	statepart: partition@100000 {
+		label = "barebox-state";
+		reg = <0x100000 0x100000>;
+	};
+};
+#endif
+
+/** RIoTboard i.MX6S **********************************************************/
+#ifdef imx6s_riotboard_dts
+/ {
+	aliases {
+		state = &state_usdhc4;
+	};
+
+	state_usdhc4: state {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "barebox,state";
+		magic = <0x95ab2de7>;
+		backend-type = "raw";
+		backend = <&backend_state_usdhc4>;
+		backend-storage-type = "direct";
+		backend-stridesize = <0x40>;
+	};
+};
+
+&usdhc4 {
+	backend_state_usdhc4: partition@100000 {
+		label = "barebox-state";
+		reg = <0x100000 0x40000>;
+	};
+};
+#endif
+
+/** STM32MP1 ******************************************************************/
+#if defined(stm32mp157c_lxa_mc1_dts) || \
+    defined(stm32mp157c_lxa_mc1_scmi_dts) || \
+    defined(stm32mp157c_dk2_dts) || \
+    defined(stm32mp157c_ev1_dts) || \
+    defined(stm32mp135f_dk_dts)
+/ {
+	aliases {
+		state = &state_mmc0;
+	};
+
+	state_mmc0: state {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "barebox,state";
+		magic = <0x778ec0f4>;
+		backend = <&sdmmc1>;   // via GPT Type UUID
+		backend-type = "raw";
+		backend-storage-type = "direct";
+		backend-stridesize = <0x40>;
+	};
+};
+#endif
+
+/** Generic bootstate node for all platforms **********************************/
+/ {
+	state: state {
+		bootstate: bootstate {};
+	};
+};
+
+&bootstate {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	system0 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		remaining_attempts@0 {
+			reg = <0x0 0x4>;
+			type = "uint32";
+			default = <3>;
+		};
+
+		priority@4 {
+			reg = <0x4 0x4>;
+			type = "uint32";
+			default = <20>;
+		};
+	};
+
+	system1 {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		remaining_attempts@8 {
+			reg = <0x8 0x4>;
+			type = "uint32";
+			default = <3>;
+		};
+
+		priority@c {
+			reg = <0xc 0x4>;
+			type = "uint32";
+			default = <10>;
+		};
+	};
+
+	last_chosen@10 {
+		reg = <0x10 0x4>;
+		type = "uint32";
+	};
+};

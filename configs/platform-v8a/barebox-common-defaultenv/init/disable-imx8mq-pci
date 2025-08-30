@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if of_compatible -k fsl,imx8mq-evk; then
+	echo "Disabling PCI to avoid issues with older EVK revisions"
+	of_property -fs /soc@0/pcie@33800000 status disabled
+	of_property -fs /soc@0/pcie@33c00000 status disabled
+fi

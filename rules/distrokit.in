@@ -1,0 +1,5 @@
+## SECTION=project_specific
+
+menu "DistroKit                     "
+source "generated/distrokit.in"
+endmenu

@@ -1,0 +1,7 @@
+## SECTION=non_free_firmware
+
+config FIRMWARE_TI
+	tristate
+	prompt "firmware-ti"
+	help
+	  Inject necessary files for boot process from TI firmware for into Barebox-R5

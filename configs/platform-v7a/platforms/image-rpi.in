@@ -1,0 +1,12 @@
+## SECTION=image
+
+config IMAGE_RPI
+	tristate
+	select HOST_GENIMAGE
+	select HOST_DOSFSTOOLS
+	select HOST_MTOOLS
+	select IMAGE_ROOT_EXT
+	select BAREBOX
+	prompt "Generate images/rpi.hdimg"
+	help
+	  SD card image for the Raspberry Pi 2, 3 and CM3

@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: 0-BSD
+# SPDX-FileCopyrightText: 2021 Roland Hieber, Pengutronix <rhi@pengutronix.de>
+
+ACTION=="remove", GOTO="rauc_partitions_end"
+SUBSYSTEM!="block", GOTO="rauc_partitions_end"
+
+IMPORT{program}="of_base_compatible"
+
+# Add symlinks named /dev/disk/by-usage/{data,rootfs0,rootfs1} pointing
+# to the correct partitions based on the device tree compatible
+
+# first part: find out the boot disk on known platforms
+ENV{OF_BASE_COMPATIBLE}=="*arm,vexpress,v2p-ca9*", ENV{ID_PATH}=="platform-bus@40000000:motherboard-bus@40000000:iofpga@7,00000000-amba-10005000.mmci", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*lxa,stm32mp157c-mc1*", ENV{ID_PATH}=="platform-soc-amba-58005000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*ti,am335x-bone-black*", ENV{ID_PATH}=="platform-48060000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*raspberrypi,3-model-b*", ENV{ID_PATH}=="platform-3f202000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*riot,imx6s-riotboard*", ENV{ID_PATH}=="platform-2198000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*radxa,rock3a*", ENV{ID_PATH}=="platform-fe2b0000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*tq,imx8mp-tqma8mpql-mba8mpxl*" ENV{ID_PATH}=="platform-30b50000.mmc", TAG+="boot_disk"
+ENV{OF_BASE_COMPATIBLE}=="*tq,imx93-tqma9352-mba93xxca*" ENV{ID_PATH}=="platform-42860000.mmc", TAG+="boot_disk"
+
+# second part: create /dev/disk/by-usage/ symlinks
+ENV{DEVTYPE}!="partition", GOTO="rauc_partitions_end"
+
+# symlinks based on GPT partition labels
+TAGS=="boot_disk", ENV{ID_PART_ENTRY_NAME}=="root-A", SYMLINK+="disk/by-usage/rootfs0"
+TAGS=="boot_disk", ENV{ID_PART_ENTRY_NAME}=="root-B", SYMLINK+="disk/by-usage/rootfs1"
+TAGS=="boot_disk", ENV{ID_PART_ENTRY_NAME}=="data",   SYMLINK+="disk/by-usage/data"
+
+LABEL="rauc_partitions_end"

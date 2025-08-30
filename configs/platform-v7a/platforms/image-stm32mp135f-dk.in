@@ -1,0 +1,13 @@
+## SECTION=image
+
+config IMAGE_STM32MP135F_DK
+	tristate
+	select HOST_GENIMAGE
+	select HOST_TF_A
+	select IMAGE_ROOT_EXT
+	select TF_A_STM32MP13
+	select OPTEE
+	select BAREBOX
+	prompt "Generate images/stm32mp135f-dk.hdimg"
+	help
+	  Generate GPT image for the STM32MP135F-DK

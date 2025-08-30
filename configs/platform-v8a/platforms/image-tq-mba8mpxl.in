@@ -1,0 +1,10 @@
+## SECTION=image
+
+config IMAGE_TQ_MBA8MPXL
+	tristate
+	select HOST_GENIMAGE
+	select IMAGE_ROOT_EXT
+	select BAREBOX
+	prompt "Generate images/tq-mba8mpxl.img"
+	help
+	  Generate a bootable SD card image to deploy on a TQ MBa8MPxL board.

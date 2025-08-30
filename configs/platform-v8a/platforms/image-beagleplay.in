@@ -1,0 +1,13 @@
+## SECTION=image
+
+config IMAGE_BEAGLEPLAY
+	tristate
+	select HOST_GENIMAGE
+	select HOST_DOSFSTOOLS
+	select HOST_MTOOLS
+	select IMAGE_FIP_K3
+	select HOST_E2FSPROGS
+	prompt "Generate images/image-beagleplay.hdimg"
+	help
+	  Complete image for BeaglePlay. Includes all barebox bootloader stages,
+	  firmware images as well as root filesystem.

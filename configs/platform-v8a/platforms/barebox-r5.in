@@ -1,0 +1,15 @@
+## SECTION=bootloader
+
+config BAREBOX_R5
+	tristate
+	prompt "Barebox (r5)"
+	select HOST_SYSTEM_PYTHON3
+	select HOST_SYSTEM_PYTHON3_PYYAML
+	select FIRMWARE_TI
+	help
+	  FIXME
+
+config COMPILERPREFIX_R5
+	string
+	prompt "compiler prefix (R5)"
+	default "arm-v7a-linux-gnueabihf-"

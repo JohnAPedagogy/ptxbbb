@@ -1,0 +1,35 @@
+From 0da08cd25a0bacfa22cde380d5ead90077b6c7b3 Mon Sep 17 00:00:00 2001
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Wed, 21 Aug 2024 15:12:02 +0200
+Subject: [PATCH 2/2] MIPS: qemu-malta: explicitly set stdout-path
+
+The Malta device tree describes and enables two consoles, but doesn't
+specify which one to use for barebox console.
+
+In configurations with CONFIG_CONSOLE_ACTIVATE_FIRST, it's thus
+dependent on device tree probe order, which console ends up being used
+by barebox.
+
+Fix this by explicitly pointing stdout-path at the first console.
+
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+ arch/mips/dts/qemu-malta.dts | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/mips/dts/qemu-malta.dts b/arch/mips/dts/qemu-malta.dts
+index c2bc03dd4631..6cf7513ff5fa 100644
+--- a/arch/mips/dts/qemu-malta.dts
++++ b/arch/mips/dts/qemu-malta.dts
+@@ -8,6 +8,8 @@ / {
+ 	#size-cells = <1>;
+ 
+ 	chosen {
++		stdout-path = &uart0;
++
+ 		environment {
+ 			compatible = "barebox,environment";
+ 			device-path = &env_nor;
+-- 
+2.39.2
+
