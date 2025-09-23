@@ -25,8 +25,6 @@ func (a *ArenaAllocator) Alloc(size uintptr, align uintptr) (unsafe.Pointer, err
 		return nil, errors.New("arena allocator has been moved")
 	}
 
-	remainingBytes := a.size - a.offset
-
 	// Calculate aligned address
 	currentAddr := uintptr(unsafe.Pointer(&a.buffer[0])) + a.offset
 	alignedAddr := (currentAddr + align - 1) &^ (align - 1)

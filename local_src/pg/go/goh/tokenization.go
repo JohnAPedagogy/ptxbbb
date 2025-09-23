@@ -107,7 +107,7 @@ func (t *Tokenizer) Tokenize() []Token {
 
 		if unicode.IsLetter(ch) {
 			buf += string(t.consume())
-			for t.peek(0) != nil && unicode.IsLetterOrDigit(*t.peek(0)) {
+			for t.peek(0) != nil && (unicode.IsLetter(*t.peek(0)) || unicode.IsDigit(*t.peek(0))) {
 				buf += string(t.consume())
 			}
 

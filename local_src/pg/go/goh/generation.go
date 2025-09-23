@@ -151,7 +151,7 @@ func (g *Generator) genStmt(stmt *NodeStmt) {
 	case *NodeStmtAssign:
 		found := false
 		var stackLoc int
-		for i, variable := range g.vars {
+		for _, variable := range g.vars {
 			if variable.Name == *v.Ident.Value {
 				stackLoc = variable.StackLoc
 				found = true
