@@ -9,3 +9,5 @@
 /src
 *.sw*
 Documentation/
+**/debug/
+**/target/
