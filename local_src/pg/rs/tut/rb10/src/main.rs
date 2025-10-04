@@ -24,6 +24,7 @@ fn largest_char(list: &[char]) -> &char {
     largest
 }
 
+#[allow(dead_code)]
 fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
     let mut largest = &list[0];
 
@@ -37,9 +38,10 @@ fn largest<T: std::cmp::PartialOrd>(list: &[T]) -> &T {
 }
 
 fn main() {
-    gen01();
+    gen02();
 }
 
+#[allow(dead_code)]
 fn gen01() {
     let number_list = vec![34, 50, 25, 100, 65];
 
@@ -62,4 +64,24 @@ fn gen00() {
 
     let result = largest_char(&char_list);
     println!("The largest char is {result}");
+}
+
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Point<T> {
+    fn x(&self) -> &T {
+        &self.x
+    }
+    fn y(&self) -> &T {
+        &self.y
+    }
+}
+
+fn gen02() {
+    let p = Point { x: 5, y: 10 };
+
+    println!("p.x = {} p.y = {}", p.x(), p.y());
 }
