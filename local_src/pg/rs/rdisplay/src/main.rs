@@ -1,9 +1,7 @@
 use std::env;
-use std::fs;
-use std::path::Path;
-use serde_json::Value;
 
-mod lib;
+// Import the library functions directly
+use rdisplay::reset_gui_tile_state;
 
 fn main() {
     let default_path = "/var/lib/ipt4-daemon/settings.das";
@@ -14,7 +12,7 @@ fn main() {
         default_path
     };
 
-    if let Err(e) = lib::reset_gui_tile_state(json_path) {
+    if let Err(e) = reset_gui_tile_state(json_path) {
         eprintln!("Error: {}", e);
     }
 }

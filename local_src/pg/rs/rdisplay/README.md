@@ -50,6 +50,11 @@ To specify a different JSON file:
 ```
 cargo run -- /path/to/your/file.json
 ```
+building for linux target
+```
+cargo build --target armv7-unknown-linux-gnueabihf
+rustup target add armv7-unknown-linux-gnueabihf
+```
 
 ## License
 
