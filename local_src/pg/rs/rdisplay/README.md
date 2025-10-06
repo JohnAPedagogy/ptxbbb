@@ -55,7 +55,10 @@ building for linux target
 cargo build --target armv7-unknown-linux-gnueabihf
 rustup target add armv7-unknown-linux-gnueabihf
 ```
-
+alternatively
+```
+cross build --target armv7-unknown-linux-gnueabihf --release
+```
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
