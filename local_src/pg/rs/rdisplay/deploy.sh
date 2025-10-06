@@ -34,9 +34,9 @@ if [ ! -f "$EXECUTABLE" ]; then
     fi
     
     # Use cross to build for ARM (requires Docker)
-    # cross build --target armv7-unknown-linux-gnueabihf --release
-      rustup target add armv7-unknown-linux-gnueabihf
-      cargo build --target armv7-unknown-linux-gnueabihf --release
+    cross build --target armv7-unknown-linux-gnueabihf --release
+    #   rustup target add armv7-unknown-linux-gnueabihf
+    #   cargo build --target armv7-unknown-linux-gnueabihf --release
     # Check if build was successful
     if [ ! -f "$EXECUTABLE" ]; then
         echo "Error: Build failed or executable still not found"
