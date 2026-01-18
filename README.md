@@ -72,6 +72,31 @@ sudo make install
 
 ### 📦 Step-by-Step Build Guide
 
+### Raspberrypi Steps
+
+From the bbbptx project directory run:
+
+1. Select the Raspberry Pi platform:
+```shell
+../ptxdist-2025.06.0/bin/ptxdist platform configs/platform-rpi1/platformconfig
+```
+2. Ensure the project config is selected (if not already):
+```shell
+../ptxdist-2025.06.0/bin/ptxdist select configs/ptxconfig
+```
+3. Select the toolchain
+```shell
+ ../ptxdist-2025.06.0/bin/ptxdist toolchain /opt/OSELAS.Toolchain-2023.07.1/arm-v7a-linux-gnueabihf/gcc-13.2.1-clang-16.0.6-glibc-2.37-binutils-2.40-kernel-6.3.6-sanitized
+```
+4. Build:
+```shell
+../ptxdist-2025.06.0/bin/ptxdist go -j 7
+```
+💡 If you see a version mismatch error, add --force for a quick test (not recommended for production):
+```shell
+.ptxdist --force go -j 7
+```
+### Beaglebone Steps
 #### 1. **Clone the DistroKit Repository**
 
 ```bash
