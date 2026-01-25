@@ -1,7 +1,16 @@
-.*.cmd
-*.o
+# Kernel Module Build Artifacts
 *.ko
+*.o
 *.mod
 *.mod.c
+*.mod.o
 *.order
+*.symvers
+.tmp_versions/
+.*.cmd
+.cache.mk
+
+# Debug files
+*.ko.unsigned
+modules.order
 Module.symvers
